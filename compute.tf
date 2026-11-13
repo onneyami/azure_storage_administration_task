@@ -1,13 +1,13 @@
 resource "azurerm_virtual_network" "lab_vnet" {
   name                = "vnet-storage-lab"
   address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.lab_rg.location
-  resource_group_name = azurerm_resource_group.lab_rg.name
+  location            = data.azurerm_resource_group.lab.location
+  resource_group_name = data.azurerm_resource_group.lab.name
 }
 
 resource "azurerm_subnet" "lab_subnet" {
   name                 = "snet-storage-lab"
-  resource_group_name  = azurerm_resource_group.lab_rg.name
+  resource_group_name  = data.azurerm_resource_group.lab.name
   virtual_network_name = azurerm_virtual_network.lab_vnet.name
   address_prefixes     = ["10.0.1.0/24"]
   service_endpoints    = ["Microsoft.Storage"]
@@ -15,15 +15,15 @@ resource "azurerm_subnet" "lab_subnet" {
 
 resource "azurerm_public_ip" "lab_pip" {
   name                = "pip-storage-lab"
-  location            = azurerm_resource_group.lab_rg.location
-  resource_group_name = azurerm_resource_group.lab_rg.name
+  location            = data.azurerm_resource_group.lab.location
+  resource_group_name = data.azurerm_resource_group.lab.name
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "lab_nic" {
   name                = "nic-storage-lab"
-  location            = azurerm_resource_group.lab_rg.location
-  resource_group_name = azurerm_resource_group.lab_rg.name
+  location            = data.azurerm_resource_group.lab.location
+  resource_group_name = data.azurerm_resource_group.lab.name
 
   ip_configuration {
     name                          = "internal"
@@ -35,11 +35,11 @@ resource "azurerm_network_interface" "lab_nic" {
 
 resource "azurerm_linux_virtual_machine" "lab_vm" {
   name                            = "vm-storage-lab"
-  resource_group_name             = azurerm_resource_group.lab_rg.name
-  location                        = azurerm_resource_group.lab_rg.location
+  resource_group_name             = data.azurerm_resource_group.lab.name
+  location                        = data.azurerm_resource_group.lab.location
   size                            = "Standard_B1s"
   admin_username                  = "azureuser"
-  admin_password                  = "P@ssw0rd1234Lab!" # For test lab, in prod use SSH
+  admin_password                  = "P@ssw0rd1234Lab!"
   disable_password_authentication = false
   network_interface_ids           = [azurerm_network_interface.lab_nic.id]
 
@@ -55,7 +55,6 @@ resource "azurerm_linux_virtual_machine" "lab_vm" {
     version   = "latest"
   }
 
-  # Cloud-init installation cifs-utils
   custom_data = base64encode(<<-EOF
               #!/bin/bash
               apt-get update
