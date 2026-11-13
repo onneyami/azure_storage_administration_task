@@ -6,7 +6,7 @@ resource "azurerm_storage_account" "lab_sa" {
   account_replication_type = "LRS"
 
   # Simulation Break / Fix: Blob is available publicly with requered private
-  allow_nested_items_to_be_public = true 
+  allow_nested_items_to_be_public = true
 
   static_website {
     index_document = "index.html"
