@@ -1,7 +1,7 @@
 resource "azurerm_virtual_network" "lab_vnet" {
   name                = "vnet-storage-lab"
   address_space       = ["10.0.0.0/16"]
-  location            = data.azurerm_resource_group.lab.location
+  location            = var.location
   resource_group_name = data.azurerm_resource_group.lab.name
 }
 
@@ -15,14 +15,14 @@ resource "azurerm_subnet" "lab_subnet" {
 
 resource "azurerm_public_ip" "lab_pip" {
   name                = "pip-storage-lab"
-  location            = data.azurerm_resource_group.lab.location
+  location            = var.location
   resource_group_name = data.azurerm_resource_group.lab.name
   allocation_method   = "Dynamic"
 }
 
 resource "azurerm_network_interface" "lab_nic" {
   name                = "nic-storage-lab"
-  location            = data.azurerm_resource_group.lab.location
+  location            = var.location
   resource_group_name = data.azurerm_resource_group.lab.name
 
   ip_configuration {
@@ -36,7 +36,7 @@ resource "azurerm_network_interface" "lab_nic" {
 resource "azurerm_linux_virtual_machine" "lab_vm" {
   name                            = "vm-storage-lab"
   resource_group_name             = data.azurerm_resource_group.lab.name
-  location                        = data.azurerm_resource_group.lab.location
+  location                        = var.location
   size                            = "Standard_B1s"
   admin_username                  = "azureuser"
   admin_password                  = "P@ssw0rd1234Lab!"

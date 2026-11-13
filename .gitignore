@@ -21,3 +21,6 @@ override.tf.json
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# SSH keys
+*.pem
