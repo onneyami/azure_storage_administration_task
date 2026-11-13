@@ -1,0 +1,23 @@
+# Local execution state
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Ignore local override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraform/
+.terraform.lock.hcl
+
+# Ignore variable files with credentials
+*.tfvars
+!*.example.tfvars
+
+# OS generated files
+.DS_Store
+Thumbs.db
